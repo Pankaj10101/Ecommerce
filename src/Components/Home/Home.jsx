@@ -1,29 +1,46 @@
-import React from 'react';
-import { useContext } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { Store } from '../../store/context';
-import ProductCard from './ProductCard';
+import React from "react";
+import Banner from "./Banner";
+import { Button, Table } from "react-bootstrap";
 
 const Home = () => {
-  const {items} = useContext(Store);
-
   return (
-    <Container className="my-5">
-      <h1 className="text-center mb-5">Our Products</h1>
-      <Row>
-        {items.map((item) => (
-          <Col key={item.id} md={4} sm={6} xs={12} className="mb-4">
-            <ProductCard
-              image={item.imageUrl}
-              name={item.title}
-              price={item.price}
-              id={item.id}
-              prod={item}
-            />
-          </Col>
-        ))}
-      </Row>
-    </Container>
+    <>
+      <Banner />
+
+      <section className="m-auto" style={{width:'70vw'}}>
+        <h1 className="text-center mt-5 mb-4" >TOURS</h1>
+        <div>
+          <Table>
+            <tbody>
+              <tr>
+                <td>JUL16</td>
+                <td>DETROIT, MI</td>
+                <td>DTE ENERGY MUSIC THEATRE</td>
+                <td className="d-flex justify-content-center " ><Button>BUY TICKETS</Button></td>
+              </tr>
+              <tr>
+                <td>JUL16</td>
+                <td>DETROIT, MI</td>
+                <td>DTE ENERGY MUSIC THEATRE</td>
+                <td className="d-flex justify-content-center " ><Button>BUY TICKETS</Button></td>
+              </tr>
+              <tr>
+                <td>JUL16</td>
+                <td>DETROIT, MI</td>
+                <td>DTE ENERGY MUSIC THEATRE</td>
+                <td className="d-flex justify-content-center " ><Button>BUY TICKETS</Button></td>
+              </tr>
+              <tr>
+                <td>JUL16</td>
+                <td>DETROIT, MI</td>
+                <td>DTE ENERGY MUSIC THEATRE</td>
+                <td className="d-flex justify-content-center " ><Button>BUY TICKETS</Button></td>
+              </tr>
+            </tbody>
+          </Table>
+        </div>
+      </section>
+    </>
   );
 };
 
