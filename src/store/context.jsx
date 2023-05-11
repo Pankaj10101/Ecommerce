@@ -68,7 +68,7 @@ const Context = ({children}) => {
         })
     }
 
-    const decreaseQty=(id, quantity)=>{
+    const decreaseQty=(id)=>{
         dispatch({
             type : 'DECREASEQTY',
             payload :{

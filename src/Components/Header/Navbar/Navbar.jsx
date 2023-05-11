@@ -14,10 +14,10 @@ function CustomNavbar() {
         <BootstrapNavbar.Brand><Link to='/' style={{ textDecoration: "none", color: "blue" }}>Ecommerce Website</Link></BootstrapNavbar.Brand>
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link to="/">Home</Nav.Link>
-            <Nav.Link to="/about">About</Nav.Link>
-            <Nav.Link to="/categories">Categories</Nav.Link>
+          <Nav className="me-auto d-flex gap-2" >
+            <Link style={{textDecoration :"none", color: 'grey'}} to="/">Home</Link>
+            <Link style={{textDecoration :"none", color: 'grey'}} to="/about">About</Link>
+            <Link style={{textDecoration :"none", color: 'grey'}} to="/categories">Categories</Link>
           </Nav>
           <Nav>
             <Link to="/cart">
