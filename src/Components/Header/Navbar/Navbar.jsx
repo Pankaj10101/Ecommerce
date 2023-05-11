@@ -1,24 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navbar as BootstrapNavbar, Nav, Container } from "react-bootstrap";
 import { BiCart } from "react-icons/bi";
-
+import { Link } from "react-router-dom";
+import { Store } from "../../../store/context";
 function CustomNavbar() {
+
+  const {cartItems} =  useContext(Store) 
+  const totalQuantity = cartItems.reduce((acc, item)=> acc+item.quantity, 0)
+
   return (
     <BootstrapNavbar bg="light" expand="lg">
       <Container>
-        <BootstrapNavbar.Brand href="/">Ecommerce Website</BootstrapNavbar.Brand>
+        <BootstrapNavbar.Brand><Link to='/' style={{ textDecoration: "none", color: "blue" }}>Ecommerce Website</Link></BootstrapNavbar.Brand>
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/about">About</Nav.Link>
-            <Nav.Link href="/categories">Categories</Nav.Link>
+            <Nav.Link to="/">Home</Nav.Link>
+            <Nav.Link to="/about">About</Nav.Link>
+            <Nav.Link to="/categories">Categories</Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link href="/cart">
+            <Link to="/cart">
             <BiCart size={24} color="blue" />
-              <span className="ms-1">0</span>
-            </Nav.Link>
+              <span className="ms-1 ">{totalQuantity}</span>
+            </Link>
           </Nav>
         </BootstrapNavbar.Collapse>
       </Container>
