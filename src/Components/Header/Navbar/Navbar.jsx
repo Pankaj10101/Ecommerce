@@ -17,6 +17,7 @@ function CustomNavbar() {
           <Nav className="me-auto d-flex gap-2" >
             <NavLink style={{textDecoration :"none", color: 'grey'}} to="/">Home</NavLink>
             <NavLink style={{textDecoration :"none", color: 'grey'}} to="/about">About</NavLink>
+            <NavLink style={{textDecoration :"none", color: 'grey'}} to="/contact-us">Contact Us</NavLink>
             <NavLink style={{textDecoration :"none", color: 'grey'}} to="/Store">Store</NavLink>
           </Nav>
           <Nav>

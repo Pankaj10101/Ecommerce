@@ -17,50 +17,53 @@ export const reducer = (state, action) => {
       }
       return {
         ...state,
-        cartItems: [...state.cartItems, { ...action.payload.prod, quantity: 1 }],
+        cartItems: [
+          ...state.cartItems,
+          { ...action.payload.prod, quantity: 1 },
+        ],
       };
     }
 
-
-    case 'REMOVEITEM' : {
-      return{
+    case "REMOVEITEM": {
+      return {
         ...state,
-        cartItems: state.cartItems.filter((item)=> item.id !== action.payload.id)
-      }
+        cartItems: state.cartItems.filter(
+          (item) => item.id !== action.payload.id
+        ),
+      };
     }
 
-    case 'CLEARCART' : {
-      return{
+    case "CLEARCART": {
+      return {
         ...state,
-        cartItems : []
-      }
+        cartItems: [],
+      };
     }
 
-
-    case 'INCREASEQTY' : {
-      const updatedCart = state.cartItems.map((item)=>{
-        if(item.id===action.payload.id){
-          return {...item, quantity : item.quantity+1}
+    case "INCREASEQTY": {
+      const updatedCart = state.cartItems.map((item) => {
+        if (item.id === action.payload.id) {
+          return { ...item, quantity: item.quantity + 1 };
         }
-        return item
-    })
-    return {
-      ...state,
-      cartItems : updatedCart
-    }
+        return item;
+      });
+      return {
+        ...state,
+        cartItems: updatedCart,
+      };
     }
 
-    case 'DECREASEQTY' : {
-      const updatedCart = state.cartItems.map((item)=>{
-        if(item.id===action.payload.id && item.quantity>1){
-          return {...item, quantity : item.quantity-1}
+    case "DECREASEQTY": {
+      const updatedCart = state.cartItems.map((item) => {
+        if (item.id === action.payload.id && item.quantity > 1) {
+          return { ...item, quantity: item.quantity - 1 };
         }
-        return item
-    })
-    return {
-      ...state,
-      cartItems : updatedCart
-    }
+        return item;
+      });
+      return {
+        ...state,
+        cartItems: updatedCart,
+      };
     }
 
     default:
