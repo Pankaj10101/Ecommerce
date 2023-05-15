@@ -6,6 +6,7 @@ import ProductCard from './ProductCard';
 
 const StoreContainer = () => {
   const {items} = useContext(Store);
+  
 
   return (
     <Container className="my-5">
