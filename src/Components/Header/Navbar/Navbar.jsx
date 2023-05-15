@@ -1,13 +1,16 @@
 import React, { useContext } from "react";
-import { Navbar as BootstrapNavbar, Nav, Container } from "react-bootstrap";
+import { Navbar as BootstrapNavbar, Nav, Container, Button } from "react-bootstrap";
 import { BiCart } from "react-icons/bi";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Store } from "../../../store/context";
 function CustomNavbar() {
 
-  const {cartItems} =  useContext(Store) 
+  const {cartItems, loggedIn, setLoggedIn} =  useContext(Store) 
   const totalQuantity = cartItems.reduce((acc, item)=> acc+item.quantity, 0)
-
+  const handleLogout = ()=>{
+    localStorage.removeItem('loginId')
+    setLoggedIn(false)
+  }
   return (
     <BootstrapNavbar bg="light" expand="lg">
       <Container>
@@ -27,6 +30,8 @@ function CustomNavbar() {
             </NavLink>
           </Nav>
         </BootstrapNavbar.Collapse>
+        {!loggedIn && <Nav className="ms-4"><Link to='/login'><Button>Sign In</Button></Link></Nav>}
+        {loggedIn && <Nav className="ms-4"><Button onClick={handleLogout}>Logout</Button></Nav>}
       </Container>
     </BootstrapNavbar>
   );

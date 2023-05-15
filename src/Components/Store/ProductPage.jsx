@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Row, Col, Carousel } from "react-bootstrap";
+import { Container, Row, Col, Carousel, Button } from "react-bootstrap";
 import { Store } from "../../store/context";
 
 const ProductPage = () => {
   const { id } = useParams();
-  const { items } = useContext(Store);
+  const { items, addToCart } = useContext(Store);
 
   const product = items.find((item) => item.id === parseInt(id));
 
@@ -36,6 +36,14 @@ const ProductPage = () => {
                 Sit, ullam ipsum.
               </p>
             </div>
+            <Button
+              variant="primary"
+              onClick={() => {
+                addToCart(product, id);
+              }}
+            >
+              Add to cart
+            </Button>
           </Col>
         </Col>
       </Row>

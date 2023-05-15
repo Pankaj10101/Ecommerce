@@ -1,7 +1,8 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import { reducer } from "./Reducer";
 
 export const Store = createContext();
+
 
 const productsArr = [
   {
@@ -35,13 +36,15 @@ const productsArr = [
 ];
 
 const Context = ({ children }) => {
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [token, setToken] = useState(null)
+
   const initialvalue = {
-    items: productsArr,
+    items: productsArr, 
     cartItems: [],
   };
 
   const [state, dispatch] = useReducer(reducer, initialvalue);
-
   const addToCart = (prod, id) => {
     dispatch({
       type: "ADDTOCART",
@@ -50,8 +53,16 @@ const Context = ({ children }) => {
         id,
       },
     });
-    console.log(state.cartItems);
   };
+  useEffect(()=>{
+    const loginToken = localStorage.getItem('loginId')
+
+    if(loginToken){
+      setLoggedIn(true)
+    }else{
+      setLoggedIn(false)
+    }
+  }, [])
 
   const increaseQty = (id) => {
     dispatch({
@@ -105,6 +116,9 @@ const Context = ({ children }) => {
         removeFromCart,
         clearCart,
         sendData,
+        setLoggedIn,
+        setToken,
+        loggedIn
       }}
     >
       {children}
