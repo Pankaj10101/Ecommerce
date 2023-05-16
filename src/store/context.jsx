@@ -1,8 +1,8 @@
 import { createContext, useEffect, useReducer, useState } from "react";
 import { reducer } from "./Reducer";
+import axios from "axios";
 
 export const Store = createContext();
-
 
 const productsArr = [
   {
@@ -36,16 +36,41 @@ const productsArr = [
 ];
 
 const Context = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false)
-  const [token, setToken] = useState(null)
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [token, setToken] = useState(null);
+
+  const userMail = localStorage.getItem("userMail");
+  const API = `https://authentica-a7b13-default-rtdb.firebaseio.com/${userMail}`;
 
   const initialvalue = {
-    items: productsArr, 
+    items: productsArr,
     cartItems: [],
   };
 
   const [state, dispatch] = useReducer(reducer, initialvalue);
-  const addToCart = (prod, id) => {
+  const addToCart = async (prod, id) => {
+    const itemIndex = state.cartItems.findIndex(
+      (cartItem) => cartItem.id === id
+    );
+    if (itemIndex !== -1) {
+      const response = await axios(`${API}.json`);
+      const data = await response.data;
+      for (let key in data) {
+        if (data[key].id === id) {
+          const currentQuantity = data[key].quantity;
+          const updatedQuantity = currentQuantity + 1;
+          console.log(`${API}/${key}.json`);
+          console.log({ ...prod, quantity: updatedQuantity });
+          await axios.put(`${API}/${key}.json`, {
+            ...prod,
+            quantity: updatedQuantity,
+          });
+        }
+      }
+    } else {
+      console.log(prod);
+      axios.post(`${API}.json`, { ...prod });
+    }
     dispatch({
       type: "ADDTOCART",
       payload: {
@@ -54,17 +79,56 @@ const Context = ({ children }) => {
       },
     });
   };
-  useEffect(()=>{
-    const loginToken = localStorage.getItem('loginId')
 
-    if(loginToken){
-      setLoggedIn(true)
-    }else{
-      setLoggedIn(false)
+  const updateAxiosCart = async (apiUrl) => {
+    try {
+      const response = await axios(`${apiUrl}.json`);
+      const data = response.data;
+  
+      const cartItems = Object.values(data);
+      dispatch({
+        type: "UPDATECART",
+        payload: cartItems,
+      });
+    } catch (error) {
+      console.log("Error updating cart:", error);
     }
-  }, [])
+  };
+  
+  
+  useEffect(() => {
+    const loginToken = localStorage.getItem("loginId");
+    if (loginToken) {
+      setLoggedIn(true);
+  
+      const userMail = localStorage.getItem("userMail");
+      const updatedAPI = `https://authentica-a7b13-default-rtdb.firebaseio.com/${userMail}`;
+  
+      updateAxiosCart(updatedAPI);
+    } else {
+      const cartItems = []
+      dispatch({
+        type : 'UPDATECART',
+        payload : cartItems
+      })
+      setLoggedIn(false);
+    }
+  }, [loggedIn]);
+  
 
-  const increaseQty = (id) => {
+  const increaseQty = async (id) => {
+    const response = await axios(`${API}.json`);
+    const data = await response.data;
+    for (let key in data) {
+      if (data[key].id === id) {
+        const currentQuantity = data[key].quantity;
+        const updatedQuantity = currentQuantity + 1;
+        await axios.put(`${API}/${key}.json`, {
+          ...data[key],
+          quantity: updatedQuantity,
+        });
+      }
+    }
     dispatch({
       type: "INCREASEQTY",
       payload: {
@@ -73,7 +137,21 @@ const Context = ({ children }) => {
     });
   };
 
-  const decreaseQty = (id) => {
+  const decreaseQty = async (id) => {
+    const response = await axios(`${API}.json`);
+    const data = await response.data;
+    for (let key in data) {
+      if (data[key].id === id) {
+        const currentQuantity = data[key].quantity;
+        const updatedQuantity = currentQuantity - 1;
+        if (updatedQuantity > 0) {
+          await axios.put(`${API}/${key}.json`, {
+            ...data[key],
+            quantity: updatedQuantity,
+          });
+        }
+      }
+    }
     dispatch({
       type: "DECREASEQTY",
       payload: {
@@ -82,7 +160,15 @@ const Context = ({ children }) => {
     });
   };
 
-  const removeFromCart = (id) => {
+  const removeFromCart = async (id) => {
+    const response = await axios(`${API}.json`);
+    const data = await response.data;
+    for (let key in data) {
+      if (data[key].id === id) {
+        await axios.delete(`${API}/${key}.json`);
+      }
+    }
+
     dispatch({
       type: "REMOVEITEM",
       payload: {
@@ -92,19 +178,23 @@ const Context = ({ children }) => {
   };
 
   const clearCart = () => {
+    axios.delete(`${API}.json`);
     dispatch({
       type: "CLEARCART",
     });
   };
 
   const sendData = async (userData) => {
-  await  fetch('https://react-ecommerce-cdc2d-default-rtdb.firebaseio.com/userdata.json', {
-        method : 'POST',
-        body : JSON.stringify(userData),
+    await fetch(
+      "https://react-ecommerce-cdc2d-default-rtdb.firebaseio.com/userdata.json",
+      {
+        method: "POST",
+        body: JSON.stringify(userData),
         headers: {
-            'Content-type': 'application/json'
-        }
-    })
+          "Content-type": "application/json",
+        },
+      }
+    );
   };
   return (
     <Store.Provider
@@ -118,7 +208,7 @@ const Context = ({ children }) => {
         sendData,
         setLoggedIn,
         setToken,
-        loggedIn
+        loggedIn,
       }}
     >
       {children}

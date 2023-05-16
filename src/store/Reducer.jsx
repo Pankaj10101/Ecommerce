@@ -1,28 +1,36 @@
+
 export const reducer = (state, action) => {
   switch (action.type) {
     case "ADDTOCART": {
-      const itemIndex = state.cartItems.findIndex(
-        (cartItem) => cartItem.id === action.payload.prod.id
-      );
-      if (itemIndex !== -1) {
-        const updatedCartItems = [...state.cartItems];
-        updatedCartItems[itemIndex] = {
-          ...updatedCartItems[itemIndex],
-          quantity: updatedCartItems[itemIndex].quantity + 1,
-        };
-        return {
-          ...state,
-          cartItems: updatedCartItems,
-        };
-      }
+  const itemIndex = state.cartItems.findIndex(
+    (cartItem) => cartItem.id === action.payload.prod.id
+  );
+  if (itemIndex !== -1) {
+    const updatedCartItems = [...state.cartItems];
+    updatedCartItems[itemIndex] = {
+      ...updatedCartItems[itemIndex],
+      quantity: updatedCartItems[itemIndex].quantity + 1,
+    };
       return {
         ...state,
-        cartItems: [
-          ...state.cartItems,
-          { ...action.payload.prod, quantity: 1 },
-        ],
+        cartItems: updatedCartItems,
       };
-    }
+  }
+
+    return {
+      ...state,
+      cartItems: [
+        ...state.cartItems,
+        { ...action.payload.prod, quantity: 1 },
+      ],
+    };
+  }
+
+  case "UPDATECART":
+    return {
+      ...state,
+      cartItems: action.payload,
+    };
 
     case "REMOVEITEM": {
       return {
@@ -60,7 +68,7 @@ export const reducer = (state, action) => {
         }
         return item;
       });
-      return {
+            return {
         ...state,
         cartItems: updatedCart,
       };

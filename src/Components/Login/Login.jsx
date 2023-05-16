@@ -33,6 +33,8 @@ const Login = () => {
           setToken(data.idToken)
           localStorage.setItem('loginId', data.idToken)
           setLoggedIn(true)
+          const userMail = email.replace(/[^a-zA-Z0-9 ]/g, '')
+          localStorage.setItem('userMail', userMail)
           navigate('/')
       }else{
         alert('Login Failed')

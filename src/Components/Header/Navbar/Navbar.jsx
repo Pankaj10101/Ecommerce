@@ -23,12 +23,12 @@ function CustomNavbar() {
             <NavLink style={{textDecoration :"none", color: 'grey'}} to="/contact-us">Contact Us</NavLink>
             <NavLink style={{textDecoration :"none", color: 'grey'}} to="/Store">Store</NavLink>
           </Nav>
-          <Nav>
+     { loggedIn &&     <Nav>
             <NavLink to="/cart">
             <BiCart size={24} color="blue" />
               <span className="ms-1 ">{totalQuantity}</span>
             </NavLink>
-          </Nav>
+          </Nav>}
         </BootstrapNavbar.Collapse>
         {!loggedIn && <Nav className="ms-4"><Link to='/login'><Button>Sign In</Button></Link></Nav>}
         {loggedIn && <Nav className="ms-4"><Button onClick={handleLogout}>Logout</Button></Nav>}
